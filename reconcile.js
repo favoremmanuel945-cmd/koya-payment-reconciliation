@@ -34,7 +34,13 @@ let total = 0;
 for (const event of latest.values()) {
   if (event.status === "success") {
     count++;
-    total += Number(event.amount);
+    const amount = Number(
+      String(event.amount).replace(/,/g, "")
+    );
+    if (!Number.isFinite(amount)) {
+      throw new Error(`Invalid amount for ${event.txn_id}`);
+    }
+    total += amount;
   }
 }
 
